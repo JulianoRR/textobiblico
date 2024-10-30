@@ -22,7 +22,7 @@ async function newConsulta(input) {
 	const dataget = await responseget.json()
 	console.log(dataget.success?dataget.value:dataget.message)
 	dataget.value.response.map(res => {
-		content.innerHTML += (item_add(res.ref, res.url, res.text, res.cod))
+		content.innerHTML += (item_add(res.ref, res.text, res.url, res.cod))
 	})
 }
 
