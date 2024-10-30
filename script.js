@@ -36,8 +36,10 @@ function search() {
 function item_add(r, t, u, c) {
 	const align = calc_align()
 	return `<div class='item ${align}' id=${c} >
-				<p class='cap ${align}' style="margin-bottom: 4px"> ${t} </p>
-				<p class='${align}' style="margin-top: 0"> ${r} </p>
+				<div>
+					<p class='cap ${align}' style="margin-bottom: 4px"> ${t} </p>
+					<p class='${align}' style="margin-top: 0"> ${r} </p>
+				</div>
 				<p class='${align}'>
 					<span class="material-symbols-outlined" onclick="copy(this)">content_copy</span>
 					<span class="material-symbols-outlined" onclick="window.open('${u}', '_Bland')">link</span>
@@ -88,35 +90,30 @@ document.addEventListener('keyup', ()=>{
 
 
 function clipb(content) {
-	navigator.clipboard.writeText(content).then(()=>{
-        console.log("Text copied to clipboard...")
-    }
-    ).catch(err=>{
-        console.log('Something went wrong', err);
-    }
-    )
+	navigator.clipboard.writeText(content)
+		.then(()=>{ console.log("Text copied to clipboard...") })
+		.catch(err=>{ console.log('Something went wrong', err) })
 }
 function copy(t) {
     let content = ''
-	let item = t.parentElement.parentElement.id.split('_')
-    if (item.length == 2){
-      content = conteudo[item[0]][item[1]].join(' ')+' '+(lvs_orig[item[0]]) +' '+(parseInt(item[1])+1)
-    } else {
-    content = t.parentElement.nextSibling.innerText
-    }
+	//let item = t.parentElement.parentElement.id.split('_')
+    //if (item.length == 2){
+    //  content = conteudo[item[0]][item[1]].join(' ')+' '+(lvs_orig[item[0]]) +' '+(parseInt(item[1])+1)
+    //} else {
+    content = t.parentElement.parentElement.firstChild.innerText
+    //}
     clipb(content)
 }
 function copyAll() {
 	let content = ''
 	let t = document.querySelector("#content").children
     for(i of t){
-	    let item = i.id.split('_')
-	    if (content != ""){content += " "}
-	    if (item.length == 2){
-	      content += conteudo[item[0]][item[1]].join(' ')+' '+(lvs_orig[item[0]]) +' '+(parseInt(item[1])+1)
-	    } else {
-	    content += i.lastChild.innerText
-	    }
+	    //let item = i.id.split('_')
+	    if (content != ""){content += `/n`}
+	    //if (item.length == 2){
+	    //  content += conteudo[item[0]][item[1]].join(' ')+' '+(lvs_orig[item[0]]) +' '+(parseInt(item[1])+1)
+	    //} else {
+	    content += i.firstChild.innerText
 	}
 	clipb(content)
 }
