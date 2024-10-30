@@ -100,7 +100,9 @@ function copy(t) {
     //if (item.length == 2){
     //  content = conteudo[item[0]][item[1]].join(' ')+' '+(lvs_orig[item[0]]) +' '+(parseInt(item[1])+1)
     //} else {
-    content = t.parentElement.parentElement.firstChild.innerText
+    content = t.parentElement.parentElement.firstElementChild.innerText
+	content.replace('\n', ' ')
+	content.replaceAll('\n', '')
     //}
     clipb(content)
 }
