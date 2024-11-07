@@ -65,8 +65,6 @@ body{
         opacity: 0.8;
       }
         p.text{
-          white-space: nowrap;
-          width: 100vh;
           font-size: x-large;
         }
         p.ref{
