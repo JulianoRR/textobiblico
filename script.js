@@ -7,8 +7,9 @@ const content = document.querySelector('#content')
 
 async function newConsulta(input) {
 	const responsenew = await fetch("https://api-textobiblico.vercel.app/api/search/new", {
+		mode: "cors",
 		method: "POST",
-		body: JSON.stringify({input: input}),
+		body: JSON.stringify({"input": input}),
 		headers: {
 			"Content-Type": "application/json"
 		}
@@ -17,7 +18,7 @@ async function newConsulta(input) {
 	//console.log(datanew.success?datanew.value:datanew.message)
 
 	if(!datanew.success){return}
-	const responseget = await fetch(`https://api-textobiblico.vercel.app/api/search/${datanew.value}`)
+	const responseget = await fetch(`https://api-textobiblico.vercel.app/api/search/${datanew.value}`, { mode: "cors", method: "GET" })
 	const dataget = await responseget.json()
 	console.log(dataget.success?dataget.value:dataget.message)
 	dataget.value.response.map(res => {
@@ -36,8 +37,8 @@ function item_add(r, t, u, c) {
 	const align = calc_align()
 	return `<div class='item ${align}' id=${c} >
 				<div>
-					<p class='cap ${align}' style="margin-bottom: 4px"> ${t} </p>
-					<p class='${align}' style="margin-top: 0"> ${r} </p>
+					<p class='text ${align}' style="margin-bottom: 4px"> ${t} </p>
+					<p class='ref ${align}' style="margin-top: 0"> ${r} </p>
 				</div>
 				<p class='${align}'>
 					<span class="material-symbols-outlined" onclick="copy(this)">content_copy</span>
