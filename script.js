@@ -22,7 +22,7 @@ async function newConsulta(input) {
 	const dataget = await responseget.json()
 	console.log(dataget.success?dataget.value:dataget.message)
 	dataget.value.response.map(res => {
-		content.innerHTML += (item_add(res.ref, res.text, res.url, res.cod))
+		content.innerHTML += (item_add(res.ref, res.text, res.url, res.cod, datanew.value))
 	})
 }
 
@@ -33,7 +33,7 @@ function search() {
 	newConsulta(isearch.value)
 	isearch.focus()
 }
-function item_add(r, t, u, c) {
+function item_add(r, t, u, c, id) {
 	const align = calc_align()
 	return `<div class='item ${align}' id=${c} >
 				<div>
@@ -43,21 +43,13 @@ function item_add(r, t, u, c) {
 				<p class='${align}'>
 					<span class="material-symbols-outlined" onclick="copy(this)">content_copy</span>
 					<span class="material-symbols-outlined" onclick="window.open('${u}', '_Bland')">link</span>
+					<span class="material-symbols-outlined" onclick="share(${id})">share</span>
 				</p>
 			</div>`
 }
 function calc_align() {
 	return document.querySelector('#content').childElementCount % 2 != 1 ? 'right':'left'
 }
-
-/*
-
-<span class="material-symbols-outlined">
-share
-</span>
-
-*/
-
 
 function limpar(){
     isearch.value = ""
@@ -67,7 +59,6 @@ function search_foc(){
 	let selected = document.querySelector("#content > div.selected")
 	if (selected){selected.classList.remove("selected")}
 }
-
 
 enter.addEventListener('click', search)
 isearch.addEventListener('keyup', ()=>{if(event.keyCode == 13){search()}; if(event.keyCode == 46){limpar()}})
@@ -118,4 +109,18 @@ function copyAll() {
 	    content += i.firstChild.innerText
 	}
 	clipb(content)
+}
+
+const share = async (id) => {
+	const shareData = {
+		title: "TextoBiblico",
+		text: "Compartilhe a palavra de Deus!",
+		url: `https://api-textobiblico.vercel.app/api/search/${id}`
+	}
+	try {
+	  await navigator.share(shareData);
+	  console.log("Shared successfully")
+	} catch (err) {
+	  console.log(`Error: ${err}`)
+	}
 }
