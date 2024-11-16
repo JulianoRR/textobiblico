@@ -43,7 +43,7 @@ function item_add(r, t, u, c, id) {
 				<p class='${align}'>
 					<span class="material-symbols-outlined" onclick="copy(this)">content_copy</span>
 					<span class="material-symbols-outlined" onclick="window.open('${u}', '_Bland')">link</span>
-					<span class="material-symbols-outlined" onclick="share(${id})">share</span>
+					<span class="material-symbols-outlined" onclick="share('${id}')">share</span>
 				</p>
 			</div>`
 }
