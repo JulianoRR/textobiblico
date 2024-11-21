@@ -6,8 +6,8 @@ const content = document.querySelector('#content')
 
 
 async function newConsulta(input) {
-	const responsenew = await fetch("https://api-textobiblico.vercel.app/api/search/new", {
-		mode: "cors",
+	const responsenew = await fetch("http:/localhost:5000/api/search/new", {
+		mode: "cors", //s://api-textobiblico.vercel.app
 		method: "POST",
 		body: JSON.stringify({"input": input}),
 		headers: {
@@ -18,13 +18,16 @@ async function newConsulta(input) {
 	if(!datanew.success){return}
 	const id = datanew.value
 
-	const responseget = await fetch(`https://api-textobiblico.vercel.app/api/search/${id}`, { mode: "cors", method: "GET" })
+	const responseget = await fetch(`http:/localhost:5000/api/search/${id}`, { mode: "cors", method: "GET" })
 	const dataget = await responseget.json()
 	console.log(dataget.success?dataget.value:dataget.message)
 
-	const arrRefs = new Array()
-	dataget.value.response.map( r => { arrRefs.push(r.ref.replace(' ARC', '')) } )
-	content.innerHTML = cabecalho(id, arrRefs)
+	if (dataget.value.response.length > 1) {
+        let arrRefs = []
+        dataget.value.response.map( r => { arrRefs.push(r.ref.replace(' ARC', '')) } )
+        content.innerHTML = cabecalho(id, arrRefs)
+    }
+    content.innerHTML = ''
 	dataget.value.response.map(res => content.innerHTML += (item_add(res.ref, res.text, res.url, res.cod)))
 }
 function search() {
@@ -70,29 +73,10 @@ function limpar(){
     isearch.value = ""
     isearch.focus()
 }
-function search_foc(){
-	let selected = document.querySelector("#content > div.selected")
-	if (selected){selected.classList.remove("selected")}
-}
 
 enter.addEventListener('click', search)
 isearch.addEventListener('keyup', ()=>{if(event.keyCode == 13){search()}; if(event.keyCode == 46){limpar()}})
-isearch.addEventListener('focus', search_foc)
 clear.addEventListener('click', limpar)
-document.addEventListener('keyup', ()=>{
-	//c 67 t 84 l 76 del 46 enter 13
-	if (document.querySelector("#content").hasChildNodes()){
-		let tecla = event.keyCode
-		let selected = document.querySelector("#content > div.selected")
-		switch (tecla){
-			case 38: if(!selected){document.querySelector("#content > div:nth-last-child(1)").classList.add("selected"); isearch.blur()} else {if(selected.previousSibling){selected.previousSibling.classList.add("selected"); selected.classList.remove("selected")} else {isearch.focus()}}; break;
-			case 40: if(!selected){document.querySelector("#content > div:nth-child(1)").classList.add("selected"); isearch.blur()} else {if(selected.nextSibling){selected.nextSibling.classList.add("selected"); selected.classList.remove("selected")} else {isearch.focus()}}; break;
-			case 84: if(event.altKey){copyAll()}; break;
-			case 67: if(selected){copy(selected.firstChild.children[0])};break;
-			case 76: if(selected){selected.firstChild.children[1].click()};break;
-		}
-	}
-}, true)
 
 function clipb(content) {
 	navigator.clipboard.writeText(content)
