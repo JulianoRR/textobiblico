@@ -6,8 +6,8 @@ const content = document.querySelector('#content')
 
 
 async function newConsulta(input) {
-	const responsenew = await fetch("http:/localhost:5000/api/search/new", {
-		mode: "cors", //s://api-textobiblico.vercel.app
+	const responsenew = await fetch("https://api-textobiblico.vercel.app/api/search/new", {
+		mode: "cors", //s://api-textobiblico.vercel.app //:/localhost:5000
 		method: "POST",
 		body: JSON.stringify({"input": input}),
 		headers: {
@@ -18,7 +18,7 @@ async function newConsulta(input) {
 	if(!datanew.success){return}
 	const id = datanew.value
 
-	const responseget = await fetch(`http:/localhost:5000/api/search/${id}`, { mode: "cors", method: "GET" })
+	const responseget = await fetch(`https://api-textobiblico.vercel.app/api/search/${id}`, { mode: "cors", method: "GET" })
 	const dataget = await responseget.json()
 	console.log(dataget.success?dataget.value:dataget.message)
 
