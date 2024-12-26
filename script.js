@@ -4,9 +4,8 @@ const isearch = document.getElementById('search')
 const enter = document.getElementById('enter')
 const content = document.querySelector('#content')
 
-
 async function newConsulta(input) {
-	const responsenew = await fetch("https://api-textobiblico.vercel.app/api/search/new", {
+	const responsenew = await fetch("http:/localhost:5000/api/search/new", {
 		mode: "cors", //s://api-textobiblico.vercel.app //:/localhost:5000
 		method: "POST",
 		body: JSON.stringify({"input": input}),
@@ -18,7 +17,7 @@ async function newConsulta(input) {
 	if(!datanew.success){return}
 	const id = datanew.value
 
-	const responseget = await fetch(`https://api-textobiblico.vercel.app/api/search/${id}`, { mode: "cors", method: "GET" })
+	const responseget = await fetch(`http:/localhost:5000/api/search/${id}`, { mode: "cors", method: "GET" })
 	const dataget = await responseget.json()
 	console.log(dataget.success?dataget.value:dataget.message)
 
@@ -52,7 +51,7 @@ function cabecalho(id, refs){
 }
 function item_add(r, t, u, c) {
 	const align = calc_align()
-	const text = `${t}  ${r}`
+	const text = `-${t} ${r}`
 	return `<div class='item ${align}' id=${c} >
 				<div>
 					<p class='text ${align}' style="margin-bottom: 4px"> ${t} </p>
@@ -84,14 +83,9 @@ function clipb(content) {
 		.catch(err=>{ console.log('Something went wrong', err) })
 }
 function copy(t) {
-    //let content = ''
-	//let item = t.parentElement.parentElement.id.split('_')
-    //if (item.length == 2){
-    //  content = conteudo[item[0]][item[1]].join(' ')+' '+(lvs_orig[item[0]]) +' '+(parseInt(item[1])+1)
-    //} else {
     let content = t.parentElement.parentElement.firstElementChild.innerText
-	content = content.replace('\n', '')
-    //}
+	content = /\d\./.test(content)? '-'+content : ''+content
+	content = content.replaceAll('\n\n', ' ')
     clipb(content)
 }
 function copyAll() {
